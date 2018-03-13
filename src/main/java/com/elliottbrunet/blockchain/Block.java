@@ -1,34 +1,25 @@
 package com.elliottbrunet.blockchain;
 
-import com.elliottbrunet.StringUtil;
+import com.elliottbrunet.HashUtil;
 
 import java.util.Date;
 
+/**
+ * @author Elliott Brunet.
+ */
 public class Block {
 
     public String hash;
     public String previousHash;
-    private String data;
-    private long timeStamp;
-    private int nonce;
+    public String data;
+    public long timeStamp;
+    public int nonce;
 
-    public Block(String data, String previousHash){
+    public Block(String data, String previousHash) {
         this.data = data;
         this.previousHash = previousHash;
         this.timeStamp = new Date().getTime();
-        this.hash = calculateHash();
+        this.hash = HashUtil.calculateHash(this);
     }
 
-    public String calculateHash() {
-        return StringUtil.applySha256(previousHash + Long.toString(timeStamp) + Integer.toString(nonce) +data);
-    }
-
-    public void mineBlock(int difficulty) {
-        String target = new String(new char[difficulty]).replace('\0', '0');
-        while (!hash.substring(0, difficulty).equals(target)){
-            nonce ++;
-            hash = calculateHash();
-        }
-        System.out.println("block mined! -> " + hash);
-    }
 }
